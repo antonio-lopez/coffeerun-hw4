@@ -2,8 +2,8 @@
     'use strict';
     var FORM_SELECTOR = '[data-coffee-order="form"]';
     var CHECKLIST_SELECTOR = '[data-coffee-order="checklist"';
-    //var SERVER_URL = 'https://co.audstanley.com/coffeeorders';
-    var SERVER_URL = 'http://localhost:3000/coffeeorders';
+    var SERVER_URL = 'https://co.audstanley.com/coffeeorders';
+    //var SERVER_URL = 'http://localhost:3000/coffeeorders';
     var App = window.App;
     var Truck = App.Truck;
     var DataStore = App.DataStore;
@@ -21,9 +21,12 @@
 
     formHandler.addSubmitHandler(function (data) {
         console.log(formHandler);
-        myTruck.createOrder.call(myTruck, data);
-        checkList.addRow.call(checkList, data);
+        return myTruck.createOrder.call(myTruck, data)
+            .then(function () {
+                checkList.addRow.call(checkList, data);
+            });
     });
 
     formHandler.addInputHandler(Validation.isCompanyEmail);
+    myTruck.printOrders(checkList.addRow.bind(checkList));
 })(window);
